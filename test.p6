@@ -4,6 +4,23 @@ class SSL_METHOD is repr('CStruct') {
     has int32 $.version;
 }
 
+class SSL_CIPHER is repr('CStruct') {
+    has int32 $.valid;
+    has Str $.name;
+    has int $.id;
+
+    has int $.algorithm_mkey;
+    has int $.algorithm_auth;
+    has int $.algorithm_enc;
+    has int $.algorithm_mac;
+    has int $.algorithm_ssl;
+
+    has int $.algo_strength;
+    has int $.algorithm2;
+    has int32 $.strength_bits;
+    has int32 $.alg_bits;
+}
+
 class SSL_CTX is repr('CStruct') {
     has SSL_METHOD $.method;
 }
