@@ -55,4 +55,8 @@ my $ctx = SSL_CTX_new($c1);
 say $ctx;
 my $ssl = SSL_new($ctx);
 say $ssl;
+
+SSL_connect($ssl);
+SSL_accept($ssl);
+
 say SSL_get_error($ssl, SSL_shutdown($ssl));
