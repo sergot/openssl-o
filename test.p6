@@ -21,6 +21,10 @@ class SSL_CIPHER is repr('CStruct') {
     has int32 $.alg_bits;
 }
 
+class SSL_SESSION is repr('CStruct') {
+    has int32 $.ssl_version;
+}
+
 class SSL_CTX is repr('CStruct') {
     has SSL_METHOD $.method;
 }
