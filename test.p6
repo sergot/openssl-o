@@ -41,6 +41,7 @@ sub SSL_CTX_new(SSL_METHOD) returns SSL_CTX is native('libssl')  { * }
 sub SSL_new(SSL_CTX) returns SSL is native('libssl')             { * }
 sub SSL_shutdown(SSL) returns int32 is native('libssl')          { * }
 sub SSL_get_error(SSL, int32) returns int32 is native('libssl')  { * }
+sub SSL_accept(SSL) returns int32 is native('libssl')            { * }
 
 SSL_library_init();
 SSL_load_error_strings();
