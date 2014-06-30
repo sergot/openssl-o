@@ -32,18 +32,18 @@ class SSL_CTX is repr('CStruct') {
 class SSL is repr('CStruct') {
 }
 
-sub SSL_library_init() is native('libssl')                                { * }
-sub SSL_load_error_strings() is native('libssl')                          { * }
-sub SSLv3_client_method() returns SSL_METHOD is native('libssl')          { * }
-sub SSLv3_server_method() returns SSL_METHOD is native('libssl')          { * }
-sub SSLv3_method() returns SSL_METHOD is native('libssl')                 { * }
-sub SSL_CTX_new(SSL_METHOD) returns SSL_CTX is native('libssl')           { * }
-sub SSL_new(SSL_CTX) returns SSL is native('libssl')                      { * }
-sub SSL_shutdown(SSL) returns int32 is native('libssl')                   { * }
-sub SSL_get_error(SSL, int32) returns int32 is native('libssl')           { * }
-sub SSL_accept(SSL) returns int32 is native('libssl')                     { * }
-sub SSL_connect(SSL) returns int32 is native('libssl')                    { * }
-sub SSL_read(SSL, CArray[uint8], int32) returns int32 is native('libssl') { * }
+sub SSL_library_init() is native('libssl')                                 { * }
+sub SSL_load_error_strings() is native('libssl')                           { * }
+sub SSLv3_client_method() returns SSL_METHOD is native('libssl')           { * }
+sub SSLv3_server_method() returns SSL_METHOD is native('libssl')           { * }
+sub SSLv3_method() returns SSL_METHOD is native('libssl')                  { * }
+sub SSL_CTX_new(SSL_METHOD) returns SSL_CTX is native('libssl')            { * }
+sub SSL_new(SSL_CTX) returns SSL is native('libssl')                       { * }
+sub SSL_shutdown(SSL) returns int32 is native('libssl')                    { * }
+sub SSL_get_error(SSL, int32) returns int32 is native('libssl')            { * }
+sub SSL_accept(SSL) returns int32 is native('libssl')                      { * }
+sub SSL_connect(SSL) returns int32 is native('libssl')                     { * }
+sub SSL_read(SSL, CArray[uint8], int32) returns int32 is native('libssl')  { * }
 sub SSL_write(SSL, CArray[uint8], int32) returns int32 is native('libssl') { * }
 
 SSL_library_init();
