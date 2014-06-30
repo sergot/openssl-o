@@ -44,6 +44,7 @@ sub SSL_get_error(SSL, int32) returns int32 is native('libssl')           { * }
 sub SSL_accept(SSL) returns int32 is native('libssl')                     { * }
 sub SSL_connect(SSL) returns int32 is native('libssl')                    { * }
 sub SSL_read(SSL, CArray[uint8], int32) returns int32 is native('libssl') { * }
+sub SSL_write(SSL, CArray[uint8], int32) returns int32 is native('libssl') { * }
 
 SSL_library_init();
 SSL_load_error_strings();
@@ -62,5 +63,6 @@ SSL_accept($ssl);
 
 my $buf = CArray[uint8].new;
 say SSL_read($ssl, $buf, 1);
+say SSL_write($ssl, $buf, 1);
 
 say SSL_get_error($ssl, SSL_shutdown($ssl));
