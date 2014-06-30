@@ -6,8 +6,6 @@ class SSL_METHOD is repr('CStruct') {
 
 class SSL_CTX is repr('CStruct') {
     has SSL_METHOD $.method;
-    has int $.options;
-    has int $.mode;
 }
 
 class SSL is repr('CStruct') {
