@@ -72,7 +72,8 @@ class SSL is repr('CStruct') {
 
     has int32 $.in_handshake;
 
-    # a function?
+    # function
+    has OpaquePointer $.handshake_func;
 
     has int32 $.server;
 
