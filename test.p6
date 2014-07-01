@@ -59,6 +59,30 @@ class SSL_CTX is repr('CStruct') {
 }
 
 class SSL is repr('CStruct') {
+    has int32 $.version;
+    has int32 $.type;
+
+    has SSL_METHOD $.method;
+
+    has BIO $.rbio;
+    has BIO $.wbio;
+    has BIO $.bbio;
+
+    has int32 $.rwstate;
+
+    has int32 $.in_handshake;
+
+    # a function?
+
+    has int32 $.server;
+
+    has int32 $.new_session;
+
+    has int32 $.quiet_shutdown;
+    has int32 $.shutdown;
+
+    has int32 $.state;
+    has int32 $.rstate;
 }
 
 sub SSL_library_init() is native('libssl')                                 { * }
