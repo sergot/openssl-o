@@ -89,11 +89,11 @@ class SSL is repr('CStruct') {
 sub SSL_library_init() is native('libssl')                                 { * }
 sub SSL_load_error_strings() is native('libssl')                           { * }
 sub SSLv3_client_method() returns SSL_METHOD is native('libssl')           { * }
-sub SSLv3_server_method() returns SSL_METHOD is native('libssl')           { * }
+sub SSLv3_server_method() returns OpaquePointer is native('libssl')           { * }
 sub SSLv3_method() returns SSL_METHOD is native('libssl')                  { * }
 sub SSL_CTX_new(SSL_METHOD) returns SSL_CTX is native('libssl')            { * }
 sub SSL_new(SSL_CTX) returns SSL is native('libssl')                       { * }
-sub SSL_shutdown(SSL) returns int32 is native('libssl')                    { * }
+sub SSL_shutdown(SSL) returns OpaquePointer is native('libssl')                    { * }
 sub SSL_get_error(SSL, int32) returns int32 is native('libssl')            { * }
 sub SSL_accept(SSL) returns int32 is native('libssl')                      { * }
 sub SSL_connect(SSL) returns int32 is native('libssl')                     { * }
@@ -102,6 +102,12 @@ sub SSL_write(SSL, CArray[uint8], int32) returns int32 is native('libssl') { * }
 
 SSL_library_init();
 SSL_load_error_strings();
+
+my $abc = SSLv3_server_method();
+#nqp::nativecast(nqp::decont(int32), $abc);
+#exit;
+#say nqp::nativecast(int8, nqp::decont($abc));
+say nqp::nativecast(nqp::decont(SSL_METHOD), nqp::decont($abc));
 
 my $c1 = SSLv3_client_method();
 my $c2 = SSLv3_server_method();
@@ -119,4 +125,11 @@ my $buf = CArray[uint8].new;
 say SSL_read($ssl, $buf, 1);
 say SSL_write($ssl, $buf, 1);
 
-say SSL_get_error($ssl, SSL_shutdown($ssl));
+say "HERE:";
+
+my $shutdown = SSL_shutdown($ssl);
+say nqp::nativecast(nqp::decont(int32), nqp::decont($shutdown));
+
+exit;
+
+say SSL_get_error($ssl, $shutdown);
