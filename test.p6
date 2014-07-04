@@ -86,14 +86,30 @@ class SSL is repr('CStruct') {
     has int32 $.rstate;
 }
 
+# init funcs
 sub SSL_library_init() is native('libssl')                                 { * }
 sub SSL_load_error_strings() is native('libssl')                           { * }
+
+# method funcs
+sub SSLv2_client_method() returns SSL_METHOD is native('libssl')           { * }
+sub SSLv2_server_method() returns SSL_METHOD is native('libssl')           { * }
+sub SSLv2_method() returns SSL_METHOD is native('libssl')                  { * }
 sub SSLv3_client_method() returns SSL_METHOD is native('libssl')           { * }
 sub SSLv3_server_method() returns SSL_METHOD is native('libssl')           { * }
 sub SSLv3_method() returns SSL_METHOD is native('libssl')                  { * }
+sub SSLv23_client_method() returns SSL_METHOD is native('libssl')          { * }
+sub SSLv23_server_method() returns SSL_METHOD is native('libssl')          { * }
+sub SSLv23_method() returns SSL_METHOD is native('libssl')                 { * }
+
+# ctx funcs
 sub SSL_CTX_new(SSL_METHOD) returns SSL_CTX is native('libssl')            { * }
+sub SSL_CTX_free(SSL_CTX) is native('libssl')                              { * }
+
+# ssl funcs
 sub SSL_new(SSL_CTX) returns SSL is native('libssl')                       { * }
+sub SSL_set_fd(SSL, int32) returns int32 is native('libssl')               { * }
 sub SSL_shutdown(SSL) returns int32 is native('libssl')                    { * }
+sub SSL_free(SSL) is native('libssl')                                      { * }
 sub SSL_get_error(SSL, int32) returns int32 is native('libssl')            { * }
 sub SSL_accept(SSL) returns int32 is native('libssl')                      { * }
 sub SSL_connect(SSL) returns int32 is native('libssl')                     { * }
@@ -103,24 +119,44 @@ sub SSL_write(SSL, CArray[uint8], int32) returns int32 is native('libssl') { * }
 SSL_library_init();
 SSL_load_error_strings();
 
-my $abc = SSLv3_server_method();
+# CTX init
+my $ssl_ctx = SSL_CTX_new( SSLv23_client_method() );
+die 'context' unless $ssl_ctx.method;
+say $ssl_ctx;
 
-my $c1 = SSLv3_client_method();
-my $c2 = SSLv3_server_method();
-my $c3 = SSLv3_method();
-
-my $ctx = SSL_CTX_new($c1);
-say $ctx;
-my $ssl = SSL_new($ctx);
+# SSL init
+my $ssl = SSL_new($ssl_ctx);
+die 'ssl' unless $ssl.method;
 say $ssl;
 
-SSL_connect($ssl);
-SSL_accept($ssl);
+# SSL conf
+# TODO : socket handle, now it's the stderr
+die 'set_fd' unless SSL_set_fd($ssl, 2);
 
-my $buf = CArray[uint8].new;
-say SSL_read($ssl, $buf, 1);
-say SSL_write($ssl, $buf, 1);
+# SSL conn
+die 'connect' unless SSL_connect($ssl);
 
-my $shutdown = SSL_shutdown($ssl);
+# SSL write/read
+my $s = "GET /\r\n\r\n";
+say "write: ", SSL_write($ssl, str-to-carray($s), $s.chars);
 
-say SSL_get_error($ssl, $shutdown);
+my $c = CArray[uint8].new;
+my $read = SSL_read($ssl, $c, 5);
+say "read == $read: {$c[0..4]}";
+
+# SSL end
+SSL_shutdown($ssl);
+SSL_free($ssl);
+
+# CTX end
+SSL_CTX_free($ssl_ctx);
+
+sub str-to-carray(Str $s) {
+    my @s = $s.split('');
+    my $c = CArray[uint8].new;
+    for 0 ..^ $s.chars -> $i {
+        my uint8 $elem = @s[$i].ord;
+        $c[$i] = $elem;
+    }
+    $c;
+}
