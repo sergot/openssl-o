@@ -129,7 +129,6 @@ say $ssl_ctx;
 # SSL init
 my $ssl = SSL_new($ssl_ctx);
 die 'ssl' unless $ssl.method;
-say $ssl;
 
 # SSL conf
 # TODO : socket handle, now it's the stderr
@@ -143,6 +142,8 @@ SSL_set_connect_state($ssl);
 
 # SSL conn
 die 'connect' unless SSL_connect($ssl);
+
+say $ssl;
 
 # SSL write/read
 my $s = "GET /\r\n\r\n";
