@@ -131,7 +131,9 @@ say $ssl;
 
 # SSL conf
 # TODO : socket handle, now it's the stderr
-die 'set_fd' unless SSL_set_fd($ssl, 2);
+sub client_connect(CArray[uint8], int32) returns int32 is native('./libclient') { * }
+my $fd = client_connect(str-to-carray('filip.sergot.pl'), 80);
+die 'set_fd' unless SSL_set_fd($ssl, $fd);
 
 # SSL conn
 die 'connect' unless SSL_connect($ssl);
@@ -142,7 +144,7 @@ say "write: ", SSL_write($ssl, str-to-carray($s), $s.chars);
 
 my $c = CArray[uint8].new;
 my $read = SSL_read($ssl, $c, 5);
-say "read == $read: {$c[0..4]}";
+say "read == $read [{SSL_get_error($ssl, $read)}]: {$c[0..4]}";
 
 # SSL end
 SSL_shutdown($ssl);
@@ -150,6 +152,10 @@ SSL_free($ssl);
 
 # CTX end
 SSL_CTX_free($ssl_ctx);
+
+# close socket
+sub client_disconnect(int32) is native('./libclient') { * }
+client_disconnect($fd);
 
 sub str-to-carray(Str $s) {
     my @s = $s.split('');
