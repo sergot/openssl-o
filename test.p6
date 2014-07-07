@@ -115,6 +115,8 @@ sub SSL_accept(SSL) returns int32 is native('libssl')                      { * }
 sub SSL_connect(SSL) returns int32 is native('libssl')                     { * }
 sub SSL_read(SSL, CArray[uint8], int32) returns int32 is native('libssl')  { * }
 sub SSL_write(SSL, CArray[uint8], int32) returns int32 is native('libssl') { * }
+sub SSL_set_connect_state(SSL) is native('libssl')                         { * }
+sub SSL_set_accept_state(SSL) is native('libssl')                          { * }
 
 SSL_library_init();
 SSL_load_error_strings();
@@ -135,6 +137,8 @@ sub client_connect(CArray[uint8], int32) returns int32 is native('./libclient') 
 my $fd = client_connect(str-to-carray('filip.sergot.pl'), 80);
 say "FD: ", $fd;
 die 'set_fd' unless SSL_set_fd($ssl, $fd);
+
+SSL_set_connect_state($ssl);
 
 # SSL conn
 die 'connect' unless SSL_connect($ssl);
