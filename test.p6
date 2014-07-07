@@ -134,7 +134,7 @@ say $ssl;
 # SSL conf
 # TODO : socket handle, now it's the stderr
 sub client_connect(CArray[uint8], int32) returns int32 is native('./libclient') { * }
-my $fd = client_connect(str-to-carray('filip.sergot.pl'), 80);
+my $fd = client_connect(str-to-carray('filip.sergot.pl'), 443);
 say "FD: ", $fd;
 die 'set_fd' unless SSL_set_fd($ssl, $fd);
 
