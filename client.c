@@ -20,7 +20,7 @@ int client_connect(char *hostname, int port) {
         server.sin_addr = *((struct in_addr *) host->h_addr);
         bzero( &(server.sin_zero), 8 );
 
-        if( connect( handle, (struct sockaddr *) &server, sizeof(struct sockaddr) ) ) {
+        if( connect(handle, (struct sockaddr *) &server, sizeof(struct sockaddr)) == -1 ) {
             handle = 0;
         }
     }
