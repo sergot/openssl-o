@@ -146,13 +146,14 @@ die 'connect' unless SSL_connect($ssl);
 say $ssl;
 
 # SSL write/read
-my $s = "GET /\r\n\r\n";
+my $s = "GET / HTTP/1.1\r\nHost: filip.sergot.pl\r\n\r\n";
 say "write: ", SSL_write($ssl, str-to-carray($s), $s.chars);
 
 sub get_buff(int32) returns CArray[uint8] is native('./libclient') { * }
-my $c = get_buff(5);
-my $read = SSL_read($ssl, $c, 5);
-say "read == $read [{SSL_get_error($ssl, $read)}]: {$c[0..4]>>.chr}";
+my $to_read = 100;
+my $c = get_buff($to_read);
+my $read = SSL_read($ssl, $c, $to_read);
+say "read == $read [{SSL_get_error($ssl, $read)}]: {$c[0..$read]>>.chr.join('')}";
 
 # SSL end
 until SSL_shutdown($ssl) {
