@@ -139,6 +139,7 @@ say "FD: ", $fd;
 die 'set_fd' unless SSL_set_fd($ssl, $fd);
 
 SSL_set_connect_state($ssl);
+#SSL_set_accept_state($ssl);
 
 # SSL conn
 die 'connect' unless SSL_connect($ssl);
