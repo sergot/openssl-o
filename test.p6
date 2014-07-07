@@ -154,7 +154,7 @@ my $read = SSL_read($ssl, $c, 5);
 say "read == $read [{SSL_get_error($ssl, $read)}]: {$c[0..4]}";
 
 # SSL end
-SSL_shutdown($ssl);
+say "shutdown: ", SSL_shutdown($ssl);
 SSL_free($ssl);
 
 # CTX end
