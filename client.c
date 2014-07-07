@@ -4,6 +4,7 @@
 #include <netdb.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdlib.h>
 
 int client_connect(char *hostname, int port) {
     int error, handle;
@@ -30,4 +31,8 @@ int client_connect(char *hostname, int port) {
 
 void client_disconnect(int fd) {
     close(fd);
+}
+
+char *get_buff(int n) {
+    return (char *) malloc(n * sizeof(char));
 }

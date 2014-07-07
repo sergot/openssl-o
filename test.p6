@@ -149,9 +149,10 @@ say $ssl;
 my $s = "GET /\r\n\r\n";
 say "write: ", SSL_write($ssl, str-to-carray($s), $s.chars);
 
-my $c = CArray[uint8].new;
+sub get_buff(int32) returns CArray[uint8] is native('./libclient') { * }
+my $c = get_buff(5);
 my $read = SSL_read($ssl, $c, 5);
-say "read == $read [{SSL_get_error($ssl, $read)}]: {$c[0..4]}";
+say "read == $read [{SSL_get_error($ssl, $read)}]: {$c[0..4]>>.chr}";
 
 # SSL end
 until SSL_shutdown($ssl) {
