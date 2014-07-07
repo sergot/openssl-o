@@ -1,5 +1,9 @@
 use NativeCall;
 
+class IO::Socket::SSL is IO::Socket::INET {
+    # TODO
+}
+
 # bio.h {
 class BIO_METHOD is repr('CStruct') {
     has int32 $.type;
